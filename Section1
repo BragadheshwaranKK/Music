@@ -15,3 +15,52 @@ from sklearn.model_selection import train_test_split
 
 import warnings
 warnings.filterwarnings("ignore")
+
+#@title Run this to download your data
+
+!wget -O ./spotify_data_urls.csv 'https://storage.googleapis.com/inspirit-ai-data-bucket-1/Data/AI%20Scholars/Sessions%206%20-%2010%20(Projects)/Project%20-%20Music%20Recommendation/spotify_data_urls.csv'
+data_path = './spotify_data_urls.csv'
+
+# Load in data
+data = pd.read_csv(data_path)
+basic_data = data[['Artist','Track','Year','url','Label']]
+
+X = data[['danceability','energy','key','loudness','mode','speechiness','acousticness','instrumentalness','liveness','valence','tempo']]
+y = data[['Label']]
+
+# Take a look at our data matrix and label vector
+print(X)
+print(y)
+
+# Step 1: Split our data into training and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Step 2: Initialize our logistic regression model and train it
+lr = LogisticRegression()
+lr.fit(X_train,y_train)
+
+# Step 3: Calculate print the score
+lr_score = lr.score(X_test,y_test)
+print ("LR Score:", lr_score)
+
+your_model = LogisticRegression()
+your_model.fit(X_train,y_train)
+coef = your_model.coef_
+
+#@title Run this to display the coefficients!
+
+pd.DataFrame(list(zip(X, coef[0])), columns=['feature', 'coef'])
+
+X_2 = data[['danceability', 'loudness', 'mode', 'tempo']] # Whatever features you'd like!
+y_2 = data[['Label']]
+
+# Step 1: Split our data into training and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Step 2: Initialize our logistic regression model and train it
+lr = LogisticRegression()
+lr.fit(X_train,y_train)
+
+# Step 3: Calculate print the score
+lr_score = lr.score(X_test,y_test)
+print ("LR Score:", lr_score)
